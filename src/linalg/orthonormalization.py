@@ -28,3 +28,34 @@ def modified_gram_schmidt(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     Raises:
         AssertionError: If input is not a 2D array or if dimensions are incompatible.
     """
+    assert isinstance(A, np.ndarray), "Input A must be a numpy array"
+    assert A.ndim == 2, "Input A must be a 2D matrix"
+    
+    m, n = A.shape
+    assert m >= n, "Tall or square matrices only (m >= n); QR decomp requires linear independence"
+
+    Q = np.zeros((m, n), dtype=np.float64)
+    R = np.zeros((n, n), dtype=np.float64)
+    V = A.astype(np.float64).copy()
+
+    for i in range(n):
+        R[i, i] = np.linalg.norm(V[:, i])
+        
+        # Handle zero-norm vectors (singular matrix case)
+        if R[i, i] > 1e-15:
+            Q[:, i] = V[:, i] / R[i, i]
+        else:
+            Q[:, i] = 0.0
+            
+        # Vectorized update for remaining columns
+        if i < n - 1:
+            # Compute projections for all j > i simultaneously
+            # R[i, i+1:] = Q[:, i].T @ V[:, i+1:]
+            # V[:, i+1:] -= Q[:, i:i+1] @ R[i:i+1, i+1:]
+            
+            # Using broadcasting for vectorization
+            projections = np.dot(Q[:, i], V[:, i+1:])
+            R[i, i+1:] = projections
+            V[:, i+1:] -= np.outer(Q[:, i], projections)
+
+    return Q, R
