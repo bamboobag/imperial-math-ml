@@ -1,7 +1,28 @@
 [project]
-name = "myapp"
+name = "imperial-math-ml"
 version = "0.1.0"
-description = "Add your description here"
+description = "Mathematical Foundations for ML: A portfolio implementing Imperial ReCoDE standards for reproducible research"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "numpy>=1.24.0",
+    "matplotlib>=3.7.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.3.0",
+    "ruff>=0.1.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "I", "N", "D"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

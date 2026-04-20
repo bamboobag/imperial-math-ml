@@ -1,0 +1,48 @@
+# --- Python Standards ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+build/
+dist/
+*.egg-info/
+*.egg
+
+# --- Modern Tooling (uv & ruff) ---
+.uv/
+.ruff_cache/
+# Note: We do NOT ignore uv.lock to satisfy ReCoDE reproducibility standards
+
+# --- Testing & Quality ---
+.pytest_cache/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+
+# --- Jupyter Notebooks ---
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# --- IDEs & OS ---
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# --- Firebase Studio / IDX Specific ---
+# Ignore the internal state but keep the configuration
+.idx/*
+!.idx/dev.nix
+
+# --- Project Specific ---
+data/
+outputs/
