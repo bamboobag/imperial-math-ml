@@ -13,6 +13,9 @@ dependencies = [
 dev = [
     "pytest>=7.3.0",
     "ruff>=0.1.0",
+    "ipykernel==6.29.5",
+    "jupyter-client==8.6.2",
+    "pyzmq==26.0.3",
 ]
 
 [build-system]
@@ -26,3 +29,8 @@ select = ["E", "F", "I", "N", "D"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+
+[dependency-groups]
+dev = [
+    "pip>=26.0.1",
+]

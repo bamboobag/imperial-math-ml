@@ -1,6 +1,47 @@
 import numpy as np
 from typing import Tuple
 
+def classical_gram_schmidt(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    r"""
+    Performs the Classical Gram-Schmidt (CGS) orthonormalization.
+
+    The CGS algorithm decomposes a matrix $A \in \mathbb{R}^{m \times n}$ into an orthogonal 
+    matrix $Q \in \mathbb{R}^{m \times n}$ and an upper triangular matrix $R \in \mathbb{R}^{n \times n}$ 
+    such that $A = QR$.
+
+    Note:
+        CGS is numerically unstable in finite-precision arithmetic when dealing 
+        with ill-conditioned matrices. Modified Gram-Schmidt is preferred for 
+        stability.
+
+    Args:
+        A: A matrix of shape (m, n) where m >= n.
+
+    Returns:
+        Q: Orthonormal matrix of shape (m, n).
+        R: Upper triangular matrix of shape (n, n).
+    """
+    assert isinstance(A, np.ndarray), "Input A must be a numpy array"
+    assert A.ndim == 2, "Input A must be a 2D matrix"
+    m, n = A.shape
+    assert m >= n, "Tall or square matrices only (m >= n)"
+
+    Q = np.zeros((m, n), dtype=np.float64)
+    R = np.zeros((n, n), dtype=np.float64)
+
+    for j in range(n):
+        v = A[:, j].copy().astype(np.float64)
+        for i in range(j):
+            R[i, j] = np.dot(Q[:, i], A[:, j])
+            v -= R[i, j] * Q[:, i]
+        R[j, j] = np.linalg.norm(v)
+        if R[j, j] > 1e-15:
+            Q[:, j] = v / R[j, j]
+        else:
+            Q[:, j] = 0.0
+    return Q, R
+
+
 def modified_gram_schmidt(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     r"""
     Performs the Modified Gram-Schmidt (MGS) orthonormalization to compute the QR decomp.
