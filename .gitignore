@@ -15,7 +15,7 @@ dist/
 # --- Modern Tooling (uv & ruff) ---
 .uv/
 .ruff_cache/
-# Note: We do NOT ignore uv.lock to satisfy ReCoDE reproducibility standards
+# Note: uv.lock not ignored to satisfy ReCoDE reproducibility standards
 
 # --- Testing & Quality ---
 .pytest_cache/
