@@ -32,7 +32,7 @@ def test_power_iteration_basic():
     """Test power iteration on a simple 2x2 matrix with known dominant eigenvalue."""
     # A = [[2, 1], [1, 2]] -> eigenvalues are 3 and 1
     A = np.array([[2.0, 1.0], [1.0, 2.0]])
-    eigenvalue, eigenvector = power_iteration(A)
+    eigenvalue, eigenvector, _ = power_iteration(A)
     
     assert np.isclose(eigenvalue, 3.0, atol=1e-10)
     # Verify A*v = lambda*v
@@ -44,7 +44,7 @@ def test_power_iteration_stochastic():
         [0.8, 0.3],
         [0.2, 0.7]
     ])
-    eigenvalue, eigenvector = power_iteration(M)
+    eigenvalue, eigenvector, _ = power_iteration(M)
     assert np.isclose(eigenvalue, 1.0, atol=1e-10)
     # Check stationary distribution property: M*v = v
     assert np.allclose(M @ eigenvector, eigenvector, atol=1e-10)
@@ -55,12 +55,13 @@ def test_power_iteration_convergence():
     n = 10
     A = np.random.rand(n, n)
     A = A + A.T  # Symmetric matrices have real eigenvalues
-    eigenvalue, eigenvector = power_iteration(A, num_iterations=2000, tol=1e-12)
+    eigenvalue, eigenvector, history = power_iteration(A, num_iterations=2000, tol=1e-12)
     
     # Verify eigenvalue/eigenvector property
     result = A @ eigenvector
     expected = eigenvalue * eigenvector
     assert np.allclose(result, expected, atol=1e-10)
+    assert len(history) > 0
 
 def test_pagerank_invalid_input():
     """Test defensive assertions in pagerank functions."""
