@@ -19,8 +19,17 @@ def is_stochastic(M: np.ndarray) -> bool:
     Returns:
         bool: True if M is column-stochastic within numerical tolerance.
     """
-    # TODO: Implement stochastic matrix validation
-    pass
+    assert isinstance(M, np.ndarray), "Input M must be a numpy array"
+    assert M.ndim == 2, "Input M must be a 2D matrix"
+    assert M.shape[0] == M.shape[1], "Input M must be a square matrix"
+
+    # Non-negativity check
+    if np.any(M < -1e-15):
+        return False
+
+    # Column sum check
+    col_sums = np.sum(M, axis=0)
+    return np.allclose(col_sums, 1.0, atol=1e-12)
 
 
 def power_iteration(A: np.ndarray, 
@@ -47,5 +56,34 @@ def power_iteration(A: np.ndarray,
     Raises:
         AssertionError: If A is not square or not a 2D array.
     """
-    # TODO: Implement power iteration algorithm
-    pass
+    assert isinstance(A, np.ndarray), "Input A must be a numpy array"
+    assert A.ndim == 2, "Input A must be a 2D matrix"
+    n, m = A.shape
+    assert n == m, "Input A must be a square matrix"
+
+    # Initialize a random vector
+    b_k = np.random.rand(n)
+    b_k /= np.linalg.norm(b_k)
+
+    for _ in range(num_iterations):
+        # Calculate the matrix-vector product
+        b_k1 = np.dot(A, b_k)
+
+        # Re-normalize the vector
+        b_k1_norm = np.linalg.norm(b_k1)
+        if b_k1_norm < 1e-15:
+            return 0.0, b_k
+        
+        b_k1 /= b_k1_norm
+
+        # Check convergence
+        if np.linalg.norm(b_k - b_k1) < tol:
+            b_k = b_k1
+            break
+        
+        b_k = b_k1
+
+    # Rayleigh quotient for eigenvalue estimation
+    eigenvalue = float(np.dot(b_k.T, np.dot(A, b_k)) / np.dot(b_k.T, b_k))
+    
+    return eigenvalue, b_k
